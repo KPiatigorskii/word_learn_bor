@@ -46,9 +46,16 @@ class Dictionary:
 
     def get_all_words(self, collection_name):
         self.collection = self.db[collection_name]
-        documents = self.collection.find().toArray()
-        return documents
+        words = []
+        for doc in self.collection.find():
+            words.append(doc)
+        return words
 
     def get_random_words(self, count):
-        collection = self.db[self.name]
-        #collection.aggregate([{$sample: {size: 5}}]);
+        self.collection = self.db[self.name]
+        random_docs = []
+        print(f"random words: ")
+        for doc in self.collection.aggregate([{"$sample": {"size": count}}]):
+            print(f"{doc['word']} : {doc['on_hebrew']}")
+            random_docs.append(doc)
+        return random_docs
