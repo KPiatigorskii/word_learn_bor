@@ -50,10 +50,6 @@ async def add_word(update: Update, context: ContextTypes.DEFAULT_TYPE):
     inserted_id = dictionary_class.insert_word(word)
     await context.bot.send_message(chat_id=update.effective_chat.id, text=f"word was added with id {inserted_id}")
 
-async def test(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    g = dictionary_class.get_random_words(5)
-    await context.bot.send_message(chat_id=update.effective_chat.id, text=f"test")
-
 async def start_victorine(update: Update, context: ContextTypes.DEFAULT_TYPE):
     words = dictionary_class.get_random_words(3)
     right_word_index = random.randint(0, 2)
@@ -65,20 +61,12 @@ async def start_victorine(update: Update, context: ContextTypes.DEFAULT_TYPE):
     answers = []
     for word in words:
         answers.append(word['on_hebrew'])
-    #answers = ['Rome', 'London', 'Amsterdam']
     await context.bot.send_poll(chat_id=update.effective_chat.id, question=q, options=answers, type=Poll.QUIZ,
                                 correct_option_id=right_word_index)
-    #await context.bot.send_poll(chat_id=update.effective_chat.id, question=q, options=answers, type=Poll.QUIZ,
-               #                 correct_option_id=0)
-    #await context.bot.send_poll(chat_id=update.effective_chat.id, question=q, options=answers, type=Poll.QUIZ,
-                #                correct_option_id=0)
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await context.bot.send_message(chat_id=update.effective_chat.id, text="I'm a bot, please talk to me!")
 
-
-async def new_question(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    pass
 
 if __name__ == '__main__':
     application = ApplicationBuilder().token(os.getenv('TG_BOT_TOKEN')).build()
@@ -90,9 +78,6 @@ if __name__ == '__main__':
     select_dictionary_handler = CommandHandler("select_dictionary", select_dictionary)
     create_dictionary_handler = CommandHandler("create_dictionary", create_dictionary)
     get_select_dictionary_handler = CommandHandler("get_select_dictionary", get_select_dictionary)
-    test_handler = CommandHandler("test", test)
-
-    application.add_handler(test_handler)
 
     application.add_handler(start_victorine_handler)
     application.add_handler(start_handler)
